@@ -1,10 +1,38 @@
 version: '3'
 
 services:
-  agendero:
-    image: agendero/frontend:latest
+  traefik:
+    image: traefik:v2.10
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
     ports:
       - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - AgenderoNet
+
+  agendero:
+    image: agendero/frontend:latest
     environment:
       - URL_API=${URL_API}
+      - LOGO=${LOGO}
     restart: always
+    networks:
+      - AgenderoNet
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.agendero.rule=Host(`site.agendero.com`)"
+      - "traefik.http.routers.agendero.entrypoints=web"
+      - "traefik.http.services.agendero.loadbalancer.server.port=80"
+
+  networks:
+  AgenderoNet:
+    external: true
+

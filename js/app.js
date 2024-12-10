@@ -113,17 +113,47 @@ const app = createApp({
             }
         },
         currentPage(newVal) {
-            if (newVal === 'agenda') {
+            if (newVal === 'agenda' && this.isAuthenticated) {
                 this.$nextTick(() => {
                     this.initCalendar();
+                });
+            }
+            // Reinitialize masks when page changes
+            if (newVal === 'verification') {
+                this.$nextTick(() => {
+                    $('.code-mask').mask('000000', {
+                        clearIfNotMatch: true,
+                        placeholder: "000000"
+                    });
                 });
             }
         }
     },
     mounted() {
         // Initialize phone mask
-        $('.phone-mask').mask('(00) 00000-0000');
-        $('.code-mask').mask('000000');
+        $('.phone-mask').mask('(00) 00000-0000', {
+            clearIfNotMatch: true,
+            placeholder: "(00) 00000-0000"
+        });
+
+        // Initialize verification code mask
+        $('.code-mask').mask('000000', {
+            clearIfNotMatch: true,
+            placeholder: "000000"
+        });
+        
+        // Get logo from environment
+        if (typeof LOGO !== 'undefined') {
+            this.logo = LOGO;
+        }
+
+        // Check if user is authenticated
+        const token = localStorage.getItem('token');
+        if (token) {
+            this.isAuthenticated = true;
+            this.currentPage = 'agenda';
+            this.initCalendar();
+        }
 
         // Check for saved language preference
         const languageCookie = document.cookie
