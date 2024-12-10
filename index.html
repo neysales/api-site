@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendero</title>
+    <!-- Bootstrap CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet">
+    <!-- Vue.js -->
+    <script src="js/vue.global.js"></script>
+    <!-- jQuery -->
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <!-- jQuery Mask -->
+    <script src="js/jquery.mask.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <!-- FullCalendar -->
+    <script src='js/index.global.min.js'></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" v-if="isAuthenticated">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <img :src="logo" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
+                    Agendero
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" @click="currentPage = 'agenda'">{{ $t('menu.schedule') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" @click="currentPage = 'atendente'">{{ $t('menu.attendants') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" @click="currentPage = 'configuracao'">{{ $t('menu.settings') }}</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link text-danger" href="#" @click="logout">{{ $t('menu.logout') }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="container mt-4">
+            <!-- Login Page -->
+            <div v-if="currentPage === 'login' && !isAuthenticated" class="login-page">
+                <div class="login-box">
+                    <div class="logo-container">
+                        <img :src="logo" alt="Logo">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ $t('login.phone') }}</label>
+                        <input type="text" class="form-control phone-mask" v-model="phone" placeholder="(00) 00000-0000">
+                    </div>
+                    <div class="language-selection">
+                        <div class="language-option">
+                            <input class="form-check-input" type="radio" v-model="language" value="pt-BR" id="ptBR">
+                            <img src="images/pt-flag.png" alt="Português">
+                            <label class="form-check-label" for="ptBR">Português</label>
+                        </div>
+                        <div class="language-option">
+                            <input class="form-check-input" type="radio" v-model="language" value="en" id="en">
+                            <img src="images/en-flag.png" alt="English">
+                            <label class="form-check-label" for="en">English</label>
+                        </div>
+                    </div>
+                    <div class="buttons-container">
+                        <button class="btn btn-primary" @click="login">{{ $t('login.continue') }}</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verification Page -->
+            <div v-if="currentPage === 'verification' && !isAuthenticated" class="login-page">
+                <div class="login-box">
+                    <div class="logo-container">
+                        <img :src="logo" alt="Logo">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ $t('verification.code') }}</label>
+                        <input type="text" class="form-control code-mask" v-model="verificationCode" placeholder="000000" maxlength="6">
+                    </div>
+                    <div class="buttons-container">
+                        <button class="btn btn-secondary" @click="currentPage = 'login'">{{ $t('common.back') }}</button>
+                        <button class="btn btn-primary" @click="verify">{{ $t('verification.enter') }}</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Schedule Page -->
+            <div v-if="currentPage === 'agenda' && isAuthenticated" class="agenda-page">
+                <div id="calendar"></div>
+            </div>
+
+            <!-- Attendants Page -->
+            <div v-if="currentPage === 'atendente' && isAuthenticated" class="attendants-page">
+                <h2>{{ $t('attendants.title') }}</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>{{ $t('attendants.name') }}</th>
+                            <th>{{ $t('attendants.specialty') }}</th>
+                            <th>{{ $t('attendants.status') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="attendant in attendants" :key="attendant.id">
+                            <td>{{ attendant.name }}</td>
+                            <td>{{ attendant.specialty }}</td>
+                            <td>{{ attendant.status }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Settings Page -->
+            <div v-if="currentPage === 'configuracao' && isAuthenticated" class="settings-page">
+                <h2>{{ $t('settings.title') }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Scripts -->
+    <script src="js/translations.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

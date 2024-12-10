@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  agendero:
+    image: agendero/frontend:latest
+    ports:
+      - "80:80"
+    environment:
+      - URL_API=${URL_API}
+    restart: always
