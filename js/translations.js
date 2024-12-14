@@ -4,6 +4,7 @@ const translations = {
             schedule: 'Agenda',
             attendants: 'Atendentes',
             settings: 'Configurações',
+            specialties: 'Especialidades',
             logout: 'Sair'
         },
         login: {
@@ -27,6 +28,17 @@ const translations = {
         },
         common: {
             back: 'Voltar'
+        },
+        pages: {
+            specialties: 'Especialidades'
+        },
+        fields: {
+            name: 'Nome',
+            actions: 'Ações'
+        },
+        buttons: {
+            edit: 'Editar',
+            delete: 'Excluir'
         }
     },
     'en': {
@@ -34,6 +46,7 @@ const translations = {
             schedule: 'Schedule',
             attendants: 'Attendants',
             settings: 'Settings',
+            specialties: 'Specialties',
             logout: 'Logout'
         },
         login: {
@@ -57,6 +70,17 @@ const translations = {
         },
         common: {
             back: 'Back'
+        },
+        pages: {
+            specialties: 'Specialties'
+        },
+        fields: {
+            name: 'Name',
+            actions: 'Actions'
+        },
+        buttons: {
+            edit: 'Edit',
+            delete: 'Delete'
         }
     }
 };

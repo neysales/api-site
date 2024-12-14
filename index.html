@@ -22,7 +22,7 @@
 <body>
     <div id="app">
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" v-if="isAuthenticated">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" v-show="isAuthenticated">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">
                     <img :src="logo" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
@@ -37,7 +37,10 @@
                             <a class="nav-link" href="#" @click="currentPage = 'agenda'">{{ $t('menu.schedule') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" @click="currentPage = 'atendente'">{{ $t('menu.attendants') }}</a>
+                            <a class="nav-link" href="#" @click="currentPage = 'atendentes'">{{ $t('menu.attendants') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" @click="currentPage = 'especialidades'">{{ $t('menu.specialties') }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#" @click="currentPage = 'configuracao'">{{ $t('menu.settings') }}</a>
@@ -55,7 +58,7 @@
         <!-- Main Content -->
         <div class="container mt-4">
             <!-- Login Page -->
-            <div v-if="currentPage === 'login' && !isAuthenticated" class="login-page">
+            <div v-if="!isAuthenticated && currentPage === 'login'" class="login-page">
                 <div class="login-box">
                     <div class="logo-container">
                         <img :src="logo" alt="Logo">
@@ -83,14 +86,16 @@
             </div>
 
             <!-- Verification Page -->
-            <div v-if="currentPage === 'verification' && !isAuthenticated" class="login-page">
+            <div v-if="!isAuthenticated && currentPage === 'verification'" class="login-page">
                 <div class="login-box">
                     <div class="logo-container">
                         <img :src="logo" alt="Logo">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">{{ $t('verification.code') }}</label>
-                        <input type="tel" inputmode="numeric" pattern="[0-9]*" class="form-control code-mask" v-model="verificationCode" placeholder="000000" maxlength="6">
+                        <input type="tel" inputmode="numeric" pattern="[0-9]*" 
+                               class="form-control code-mask" v-model="verificationCode" 
+                               placeholder="000000" maxlength="6">
                     </div>
                     <div class="buttons-container">
                         <button class="btn btn-secondary" @click="currentPage = 'login'">{{ $t('common.back') }}</button>
@@ -99,41 +104,20 @@
                 </div>
             </div>
 
-            <!-- Schedule Page -->
-            <div v-if="currentPage === 'agenda' && isAuthenticated" class="agenda-page">
-                <div id="calendar"></div>
-            </div>
-
-            <!-- Attendants Page -->
-            <div v-if="currentPage === 'atendente' && isAuthenticated" class="attendants-page">
-                <h2>{{ $t('attendants.title') }}</h2>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>{{ $t('attendants.name') }}</th>
-                            <th>{{ $t('attendants.specialty') }}</th>
-                            <th>{{ $t('attendants.status') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="attendant in attendants" :key="attendant.id">
-                            <td>{{ attendant.name }}</td>
-                            <td>{{ attendant.specialty }}</td>
-                            <td>{{ attendant.status }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Settings Page -->
-            <div v-if="currentPage === 'configuracao' && isAuthenticated" class="settings-page">
-                <h2>{{ $t('settings.title') }}</h2>
-            </div>
+            <!-- Other Pages -->
+            <agenda-page v-if="currentPage === 'agenda' && isAuthenticated"></agenda-page>
+            <atendentes-page v-if="currentPage === 'atendentes' && isAuthenticated"></atendentes-page>
+            <especialidades v-if="currentPage === 'especialidades' && isAuthenticated"></especialidades>
+            <configuracao-page v-if="currentPage === 'configuracao' && isAuthenticated"></configuracao-page>
         </div>
     </div>
 
     <!-- App Scripts -->
     <script src="js/translations.js"></script>
+    <script src="components/agenda.js"></script>
+    <script src="components/atendentes.js"></script>
+    <script src="components/especialidades.js"></script>
+    <script src="components/configuracao.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

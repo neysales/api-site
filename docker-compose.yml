@@ -21,8 +21,10 @@ services:
   agendero:
     image: agendero/frontend:latest
     environment:
-      - URL_API=${URL_API}
+      - URL_API=https://api.agendero.com/
       - LOGO=${LOGO}
+      - Authentication__ApiKey=446AE6DD89E64F7F9D8964B595035644
+      
     restart: always
     networks:
       - AgenderoNet
